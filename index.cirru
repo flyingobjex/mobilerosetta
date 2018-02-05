@@ -28,7 +28,7 @@ html
       br
       = "And combining "
       a (:href https://derek-watson.github.io/swift-kotlin-js/) (:target _blank)
-        = "Swift is like Kotlin is like JS",
+        = "Swift is like Kotlin is like JS"
 
 
 
