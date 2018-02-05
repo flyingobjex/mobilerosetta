@@ -24,5 +24,5 @@ struct PageCollection: Codable {
         case entries = "entry_list"
     }
 
-    let title:String?, entries:Array<Page>?
+    let title:String?, entries:Array&lt;Page>?
 }

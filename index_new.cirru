@@ -5,18 +5,11 @@ html
   head
     title "Swift is like Go"
     meta (:charset utf-8)
-    link (:rel icon)
-      :href http://logo.cirru.org/cirru-32x32.png
-      :type image/png
-    link (:rel stylesheet)
-      :href https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/styles/github.min.css
-    style (@insert css/style.css)
+    link (:rel stylesheet) (:href css/style.css)
+    link (:rel stylesheet) (:href css/highlightjs-github.css)
     script (:src https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/highlight.min.js)
-    script (:src https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/languages/go.min.js)
-    script (:src https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/languages/swift.min.js)
-    script (:src https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/languages/kotlin.min.js)
-    script (:src https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/languages/javascript.min.js)
     script (:defer true) "hljs.initHighlightingOnLoad();"
+
   body
     a (:target _blank)
       :href https://github.com/flyingobjex/swift-is-like-go
@@ -37,30 +30,30 @@ html
       .title "Rx Observer - Basic Subscribe & Update"
       .case (.name "Function") $ .pair
         .card (.lang Javascript) $ pre.code $ code.javascript (@insert code-bdd/RxObserverExample.js)
-        .card (.lang Kotlin) $ pre.code $ code.swift (@insert code-bdd/RxObserverExample.kt)
+        .card (.lang Kotlin) $ pre.code $ code.kotlin (@insert code-bdd/RxObserverExample.kt)
         .card (.lang Swift) $ pre.code $ code.swift (@insert code-bdd/RxObserverExample.swift)
       .case (.name "Model") $ .pair
         .card (.lang Javascript) $ pre.code $ code.javascript (@insert code-bdd/Model.js)
-        .card (.lang Kotlin) $ pre.code $ code.swift (@insert code-bdd/Model.kt)
+        .card (.lang Kotlin) $ pre.code $ code.kotlin (@insert code-bdd/Model.kt)
         .card (.lang Swift) $ pre.code $ code.swift (@insert code-bdd/Model.swift)
       .case (.name "Tests") $ .pair
         .card (.lang Javascript) $ pre.code $ code.javascript (@insert code-bdd/RxObserverExampleSpec.js)
-        .card (.lang Kotlin) $ pre.code $ code.swift (@insert code-bdd/RxObserverExampleSpec.kt)
+        .card (.lang Kotlin) $ pre.code $ code.kotlin (@insert code-bdd/RxObserverExampleSpec.kt)
         .card (.lang Swift) $ pre.code $ code.swift (@insert code-bdd/RxObserverExampleSpec.swift)
 
     .section
       .title "JSON Parsing"
       .case (.name "Function") $ .pair
         .card (.lang Javascript) $ pre.code $ code.swift (@insert code-bdd/JsonExample.js)
-        .card (.lang Kotlin) $ pre.code $ code.swift (@insert code-bdd/JsonExample.kt)
+        .card (.lang Kotlin) $ pre.code $ code.kotlin (@insert code-bdd/JsonExample.kt)
         .card (.lang Swift) $ pre.code $ code.swift (@insert code-bdd/JsonExample.swift)
       .case (.name "Model") $ .pair
         .card (.lang Javascript) $ pre.code $ code.swift (@insert code-bdd/Model.js)
-        .card (.lang Kotlin) $ pre.code $ code.swift (@insert code-bdd/Model.kt)
+        .card (.lang Kotlin) $ pre.code $ code.kotlin (@insert code-bdd/Model.kt)
         .card (.lang Swift) $ pre.code $ code.swift (@insert code-bdd/Model.swift)
       .case (.name "Tests") $ .pair
         .card (.lang Javascript) $ pre.code $ code.swift (@insert code-bdd/JsonExampleSpec.js)
-        .card (.lang Kotlin) $ pre.code $ code.swift (@insert code-bdd/JsonExampleSpec.kt)
+        .card (.lang Kotlin) $ pre.code $ code.kotlin (@insert code-bdd/JsonExampleSpec.kt)
         .card (.lang Swift) $ pre.code $ code.swift (@insert code-bdd/JsonExampleSpec.swift)
 
     .section

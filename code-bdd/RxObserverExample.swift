@@ -3,7 +3,7 @@ import RxSwift
 
 class RxObserverExample {
 
-    let author:PublishSubject<Author> = PublishSubject<Author>()
+    let author:PublishSubject&lt;Author> = PublishSubject&lt;Author>()
 
     private var currentName:String? = nil
     private var currentAuthorID:Int? = nil

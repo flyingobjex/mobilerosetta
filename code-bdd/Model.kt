@@ -14,7 +14,7 @@ data class Page(
 
 data class PageCollection(val title:String?,
                           val pageid:Int = -1,
-                          private val entry_list:List<Page>) {
+                          private val entry_list:List&lt;Page>) {
 
     val entries = entry_list // direct mapping in lieu of @Json meta tags
 }

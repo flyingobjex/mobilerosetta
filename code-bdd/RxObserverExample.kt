@@ -4,7 +4,7 @@ import io.reactivex.subjects.PublishSubject
 
 class RxObserverExample {
 
-    val author = PublishSubject.create<Author>()
+    val author = PublishSubject.create&lt;Author>()
 
     private var currentName:String? = null
     private var currentAuthorID:Int? = null
