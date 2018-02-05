@@ -25,6 +25,16 @@ html
       = "You may also check "
       a (:href http://hyperpolyglot.org/c) (:target _blank)
         = "Hyperpolyglot C, Go, Swift: a side-by-side reference sheet"
+
+
+    .section
+      .title HELLO
+      .case (.name "Hello again") $ .pair
+        .card (.lang Swift) $ pre.code $ code.swift (@insert code/hello-world.swift)
+        .card (.lang Swift) $ pre.code $ code.swift (@insert code/hello-world.swift)
+        .card (.lang Swift) $ pre.code $ code.swift (@insert code/hello-world.swift)
+
+
     .section
       .title BASICS
       .case (.name "Hello World") $ .pair
