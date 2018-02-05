@@ -22,18 +22,30 @@ html
     #note
       = "Fork the repo if you want to help improve it. :)"
       br
-      = "You may also check "
-      a (:href http://hyperpolyglot.org/c) (:target _blank)
-        = "Hyperpolyglot C, Go, Swift: a side-by-side reference sheet"
+      = "Forked from the original:"
+      a (:href https://github.com/jiyinyiyong/swift-is-like-go) (:target _blank)
+        = "Swift is like GO"
+      br
+      = "And combining "
+      a (:href https://derek-watson.github.io/swift-kotlin-js/) (:target _blank)
+        = "Swift is like Kotlin is like JS",
+
 
 
     .section
-      .title HELLO
-      .case (.name "Hello again") $ .pair
-        .card (.lang Swift) $ pre.code $ code.swift (@insert code/hello-world.swift)
-        .card (.lang Swift) $ pre.code $ code.swift (@insert code/hello-world.swift)
-        .card (.lang Swift) $ pre.code $ code.swift (@insert code/hello-world.swift)
-
+      .title "JSON Parsing"
+      .case (.name "Function") $ .pair
+        .card (.lang Javascript) $ pre.code $ code.swift (@insert code-bdd/JsonExample.js)
+        .card (.lang Kotlin) $ pre.code $ code.swift (@insert code-bdd/JsonExample.kt)
+        .card (.lang Swift) $ pre.code $ code.swift (@insert code-bdd/JsonExample.swift)
+      .case (.name "Model") $ .pair
+        .card (.lang Kotlin) $ pre.code $ code.swift (@insert code-bdd/Model.kt)
+        .card (.lang Javascript) $ pre.code $ code.swift (@insert code-bdd/Model.js)
+        .card (.lang Swift) $ pre.code $ code.swift (@insert code-bdd/Model.swift)
+      .case (.name "Tests") $ .pair
+        .card (.lang Kotlin) $ pre.code $ code.swift (@insert code-bdd/JsonExampleSpec.kt)
+        .card (.lang Javascript) $ pre.code $ code.swift (@insert code-bdd/JsonExampleSpec.js)
+        .card (.lang Swift) $ pre.code $ code.swift (@insert code-bdd/JsonExampleSpec.swift)
 
     .section
       .title BASICS
