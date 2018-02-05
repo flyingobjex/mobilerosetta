@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "coffee tasks/render.coffee",
-    "up": "bash tasks/rsync.sh"
+    "up": "bash tasks/rsync.sh",
+    "publish": "bash main.sh && yarn build"
   },
   "author": "jiyinyiyong",
   "license": "MIT",

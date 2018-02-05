@@ -33,6 +33,20 @@ html
         = "Swift is like Kotlin is like JS"
 
 
+    .section
+      .title "Rx Observer - Basic Subscribe & Update"
+      .case (.name "Function") $ .pair
+        .card (.lang Javascript) $ pre.code $ code.swift (@insert code-bdd/RxObserverExample.js)
+        .card (.lang Kotlin) $ pre.code $ code.swift (@insert code-bdd/RxObserverExample.kt)
+        .card (.lang Swift) $ pre.code $ code.swift (@insert code-bdd/RxObserverExample.swift)
+      .case (.name "Model") $ .pair
+        .card (.lang Javascript) $ pre.code $ code.swift (@insert code-bdd/Model.js)
+        .card (.lang Kotlin) $ pre.code $ code.swift (@insert code-bdd/Model.kt)
+        .card (.lang Swift) $ pre.code $ code.swift (@insert code-bdd/Model.swift)
+      .case (.name "Tests") $ .pair
+        .card (.lang Javascript) $ pre.code $ code.swift (@insert code-bdd/RxObserverExampleSpec.js)
+        .card (.lang Kotlin) $ pre.code $ code.swift (@insert code-bdd/RxObserverExampleSpec.kt)
+        .card (.lang Swift) $ pre.code $ code.swift (@insert code-bdd/RxObserverExampleSpec.swift)
 
     .section
       .title "JSON Parsing"
@@ -41,12 +55,12 @@ html
         .card (.lang Kotlin) $ pre.code $ code.swift (@insert code-bdd/JsonExample.kt)
         .card (.lang Swift) $ pre.code $ code.swift (@insert code-bdd/JsonExample.swift)
       .case (.name "Model") $ .pair
-        .card (.lang Kotlin) $ pre.code $ code.swift (@insert code-bdd/Model.kt)
         .card (.lang Javascript) $ pre.code $ code.swift (@insert code-bdd/Model.js)
+        .card (.lang Kotlin) $ pre.code $ code.swift (@insert code-bdd/Model.kt)
         .card (.lang Swift) $ pre.code $ code.swift (@insert code-bdd/Model.swift)
       .case (.name "Tests") $ .pair
-        .card (.lang Kotlin) $ pre.code $ code.swift (@insert code-bdd/JsonExampleSpec.kt)
         .card (.lang Javascript) $ pre.code $ code.swift (@insert code-bdd/JsonExampleSpec.js)
+        .card (.lang Kotlin) $ pre.code $ code.swift (@insert code-bdd/JsonExampleSpec.kt)
         .card (.lang Swift) $ pre.code $ code.swift (@insert code-bdd/JsonExampleSpec.swift)
 
     .section
