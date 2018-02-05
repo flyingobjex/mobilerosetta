@@ -14,10 +14,12 @@ html
     script (:src https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/highlight.min.js)
     script (:src https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/languages/go.min.js)
     script (:src https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/languages/swift.min.js)
+    script (:src https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/languages/kotlin.min.js)
+    script (:src https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/languages/javascript.min.js)
     script (:defer true) "hljs.initHighlightingOnLoad();"
   body
     a (:target _blank)
-      :href https://github.com/jiyinyiyong/swift-is-like-go
+      :href https://github.com/flyingobjex/swift-is-like-go
       img#fork-me (:src http://jiyinyiyong.u.qiniudn.com/fork-me.png)
     #note
       = "Fork the repo if you want to help improve it. :)"
@@ -26,7 +28,7 @@ html
       a (:href https://github.com/jiyinyiyong/swift-is-like-go) (:target _blank)
         = "Swift is like GO"
       br
-      = "And combining "
+      = "Inspired by:"
       a (:href https://derek-watson.github.io/swift-kotlin-js/) (:target _blank)
         = "Swift is like Kotlin is like JS"
 
