@@ -1,0 +1,436 @@
+<!DOCTYPE html><html><head><title>MobileRosetta : Javascript - Kotlin - Swift Langauge Comparison Reference</title><meta charset="utf-8"><link rel="icon" href="http://logo.cirru.org/cirru-32x32.png" type="image/png"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/styles/github.min.css"><style>body {
+    font-family: "Helvetica Neue", sans-serif;
+    margin: 0;
+}
+
+body * {
+    box-sizing: border-box;
+}
+
+
+a {
+    color: #c7d9ff;
+}
+a:visited {
+    color: #888888;
+}
+
+
+.section {
+    background-color: #f4f4f4;
+    padding: 4em 3em;
+}
+
+.section:nth-child(2n) {
+    background-color: white;
+}
+
+.title {
+    font-size: 2.0em;
+    color: #888;
+    font-weight: 100;
+    letter-spacing: 0.2em;
+    text-align: center;
+}
+
+.case {}
+
+.name {
+    font-size: 1.8em;
+    color: #444;
+    font-weight: 300;
+    text-align: center;
+    margin: 60px;
+}
+
+.pair {
+    display: flex;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    justify-content: center;
+    -webkit-justify-content: center;
+    -ms-box-pack: center;
+    -ms-box-align: center;
+}
+
+.card {
+    flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    max-width: 590px;
+    margin: 0 10px;
+}
+
+.lang {
+    font-size: 1.3em;
+    color: #666;
+    padding-bottom: 0;
+    font-weight: 200;
+    letter-spacing: 0.07em;
+}
+
+.code {
+    font-size: 1em;
+    background-color: white;
+    margin: 0.4em 0 0 0;
+    padding: 0.4em;
+    line-height: 1.3em;
+}
+.section:nth-child(2n) .code {
+    background-color: #f4f4f4;
+}
+
+#fork-me {
+    position: absolute;
+    right: 0;
+}
+
+#note {
+    font-size: 1.5em;
+    color: #fff;
+    text-align: center;
+    padding: 0.6em;
+    background: #414141;
+    font-weight: 300;
+    letter-spacing: 0.05em;
+}
+</style><script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/highlight.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/languages/go.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/languages/swift.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/languages/kotlin.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/languages/javascript.min.js"></script><script defer="true">hljs.initHighlightingOnLoad();</script></head><body><a target="_blank" href="https://github.com/flyingobjex/swift-is-like-go"><img id="fork-me" src="./fork-me.png"></a><div id="note">A collection of common tasks and their equivalent solutions presented side-by-side in Kotlin, Javascript and Swift.<br>Central Resource: <a href="http://www.mobilerosetta.org" target="_blank">www.mobilerosetta.org</a><br>Forked from the original:<a href="https://github.com/jiyinyiyong/swift-is-like-go" target="_blank">Swift is like GO</a><br>Inspired by and a continuation of:<a href="https://derek-watson.github.io/swift-kotlin-js/" target="_blank">Swift is like Kotlin is like JS</a></div><div class="section"><div class="title">Rx Observer - Basic Subscribe & Update</div><div class="case"><div class="name">Function</div><div class="pair"><div class="card"><div class="lang">Javascript</div><pre class="code"><code class="javascript">import Rx from 'rxjs'
+import { Author } from './Model'
+
+export class RxObserverExample {
+
+  constructor(){
+
+    const self = this;
+
+    this.author = new Rx.Subject();
+    this.author.subscribe((a = new Author()) => { // add default value to prevent undefined
+      self.currentName = a.name || 'no name';
+      self.currentID = a.id || 999;
+    });
+  }
+
+  describe() {
+    return `Author: ${this.currentName || -1}, ID: ${this.currentID || 'empty'}`
+  }
+}
+</code></pre></div><div class="card"><div class="lang">Swift</div><pre class="code"><code class="swift">import Foundation
+import RxSwift
+
+class RxObserverExample {
+
+    let author:PublishSubject&lt;Author> = PublishSubject&lt;Author>()
+
+    private var currentName:String? = nil
+    private var currentAuthorID:Int? = nil
+
+    private var dispose = DisposeBag()
+    
+    init() {
+        author.subscribe(onNext:{ a in
+            self.currentName = a.name
+            self.currentAuthorID = a.id
+        }).disposed(by: dispose)
+    }
+
+    func description() -> String {
+        return "Author: \(currentName ?? "no name"), ID: \(currentAuthorID ?? 999)"
+    }
+}
+</code></pre></div></div></div><div class="case"><div class="name">Model</div><div class="pair"><div class="card"><div class="lang">Javascript</div><pre class="code"><code class="javascript">export class Author {
+  constructor(name = "default", id = 999) {
+    this.name = name;
+    this.id = id;
+  }
+}
+</code></pre></div><div class="card"><div class="lang">Swift</div><pre class="code"><code class="swift">import Foundation
+
+struct Page: Codable {
+    let title:String?, pageid:Int?, author:Author?
+}
+
+struct Author: Codable {
+    enum CodingKeys : String, CodingKey {
+        case name
+        case id = "author_id"
+    }
+
+    let name:String?, id:Int?
+    init(_ name:String?, _ id:Int?) {
+        self.name = name
+        self.id = id
+    }
+    
+}
+
+struct PageCollection: Codable {
+    enum CodingKeys : String, CodingKey {
+        case title
+        case entries = "entry_list"
+    }
+
+    let title:String?, entries:Array&lt;Page>?
+}
+</code></pre></div></div></div><div class="case"><div class="name">Tests</div><div class="pair"><div class="card"><div class="lang">Javascript</div><pre class="code"><code class="javascript">import { expect } from 'chai';
+import { RxObserverExample } from "../src/RxObserverExample";
+import { Author } from '../src/Model';
+
+describe('RxObserver example', function () {
+
+  let example = new RxObserverExample();
+
+  beforeEach(function() {
+    example = new RxObserverExample();
+  });
+
+  it("given an observable author, when an update is made, the code block should run", function(){
+    example.author.subscribe((a) => {
+      expect(a.name).to.equal("Next 1");
+      expect(a.id).to.equal(3422);
+      expect(example.describe()).to.equal("Author: Next 1, ID: 3422")
+    });
+    example.author.next(new Author("Next 1", 3422));
+  });
+
+  it("Handling Undefined- given an author with no name or id, it should return 'default' and 999", function(){
+    example.author.next();
+    expect(example.describe()).to.equal("Author: default, ID: 999")
+  });
+
+  it("Handling Partially undefined - given an author with only id, it should return 'Author: no name'", function(){
+    example.author.next(new Author(null, 555));
+    expect(example.describe()).to.equal("Author: no name, ID: 555")
+  });
+
+  it("when a subscription is updated, the description method should match", function(){
+    example.author.next(new Author("Mr Brontosaurus", 9950));
+    expect(example.describe()).to.equal("Author: Mr Brontosaurus, ID: 9950");
+
+    example.author.next(new Author("Next 1", 3422));
+    expect(example.describe()).to.equal("Author: Next 1, ID: 3422");
+
+    example.author.next(new Author("Next 2", 7788));
+    expect(example.describe()).to.equal("Author: Next 2, ID: 7788")
+  });
+
+});
+
+
+</code></pre></div><div class="card"><div class="lang">Swift</div><pre class="code"><code class="swift">import Foundation
+import Quick
+import Nimble
+import RxSwift
+
+@testable import MobileRosetta
+
+class RxObserverExampleSpec: QuickSpec {
+    override func spec() {
+
+        describe("The RxObserver example"){
+            var example:RxObserverExample = RxObserverExample()
+            var dispose:DisposeBag = DisposeBag()
+            
+            beforeEach {
+                example = RxObserverExample()
+                dispose = DisposeBag()
+            }
+            
+            it("given an observable author, when an update is made, a given code block should run"){
+                let _ = example.author.subscribe({ event in
+                    expect(event.element?.id).to(equal(2223))
+                })
+                
+                example.author.subscribe({
+                    expect($0.element?.name).to(equal("New Author"))
+                }).disposed(by: dispose)
+                
+                example.author.onNext(Author("New Author", 2223))
+            }
+            
+            it("when a subscription is updated, it should reflect the new values"){
+                example.author.onNext(Author("Next Author", 1414))
+                expect(example.description()).to(equal("Author: Next Author, ID: 1414"))
+            }
+            
+            it("given an author with no name or id, it should return 'no name' and 999"){
+                example.author.onNext(Author(nil, nil))
+                expect(example.description()).to(equal("Author: no name, ID: 999"))
+            }
+            
+            it("optional code block should execute") {
+                let _ = example.author.subscribe({
+                    if let id = $0.element?.id {
+                        print("block should execute")
+                        expect(id).to(equal(3322))
+                    }
+                    
+                    if let _ = $0.element?.name {
+                        print("!! code should not execute !!")
+                    }
+                })
+                
+                example.author.onNext(Author(nil, 3322))
+            }
+        }
+    }
+}
+</code></pre></div></div></div></div><a name="json1" target="_self"></a><br><div class="section"><div class="title">JSON Parsing</div><div class="case"><div class="name">Function</div><div class="pair"><div class="card"><div class="lang">Javascript</div><pre class="code"><code class="swift">export function parseJsonText(text) {
+  let collection = JSON.parse(text);
+  return {
+    "title":collection.title || "none",
+    "entries": collection.entry_list.map(e => {
+      if (e.author){
+        e.author.id = e.author.author_id || 0;
+      }
+      return e
+    })
+  };
+}
+
+</code></pre></div><div class="card"><div class="lang">Swift</div><pre class="code"><code class="swift">import Foundation
+
+class JsonExample {
+
+    func parseJsonText(_ text:String) -> PageCollection? {
+        let jsonData = text.data(using: .utf8)!
+        let decoder = JSONDecoder()
+
+        do {
+            let pageCollection = try decoder.decode(PageCollection.self, from: jsonData)
+            return pageCollection
+        }
+
+        catch let error {
+            print("!! error = \(error.localizedDescription)")
+        }
+
+        return nil
+    }
+}
+</code></pre></div></div></div><div class="case"><div class="name">Model</div><div class="pair"><div class="card"><div class="lang">Javascript</div><pre class="code"><code class="swift">export class Author {
+  constructor(name = "default", id = 999) {
+    this.name = name;
+    this.id = id;
+  }
+}
+</code></pre></div><div class="card"><div class="lang">Swift</div><pre class="code"><code class="swift">import Foundation
+
+struct Page: Codable {
+    let title:String?, pageid:Int?, author:Author?
+}
+
+struct Author: Codable {
+    enum CodingKeys : String, CodingKey {
+        case name
+        case id = "author_id"
+    }
+
+    let name:String?, id:Int?
+    init(_ name:String?, _ id:Int?) {
+        self.name = name
+        self.id = id
+    }
+    
+}
+
+struct PageCollection: Codable {
+    enum CodingKeys : String, CodingKey {
+        case title
+        case entries = "entry_list"
+    }
+
+    let title:String?, entries:Array&lt;Page>?
+}
+</code></pre></div></div></div><div class="case"><div class="name">Tests</div><div class="pair"><div class="card"><div class="lang">Javascript</div><pre class="code"><code class="swift">import { expect } from 'chai';
+import { parseJsonText } from "../src/JsonExample";
+
+let jsonString = `
+  {
+    "title": "Main Collection",
+    "entry_list": [
+      {
+        "title": "First Model",
+        "pageid": 2442
+      },
+      {
+        "title": "Second Model",
+        "pageid": 2553,
+        "extra": "value ignored",
+        "author": {
+          "name": "Author 1",
+          "author_id": 1422
+        }
+      }
+    ]
+  }`;
+
+describe('Json Parsing Example', function(){
+
+  let collection = parseJsonText(jsonString);
+
+  it('should map raw json key author_id to id in Author data class', function(){
+    expect(collection.entries[1].author.id).to.equal(1422);
+  });
+
+
+  it('should parse the json text into an object', function(){
+    console.log("running test");
+    expect(collection).to.be.a('object');
+    expect(collection.title).to.equal("Main Collection");
+    expect(collection.entries).to.be.a('array');
+    expect(collection.entries.length).to.equal(2);
+    expect(collection.entries[1].author.name).to.equal("Author 1");
+  })
+});
+</code></pre></div><div class="card"><div class="lang">Swift</div><pre class="code"><code class="swift">import Foundation
+import Quick
+import Nimble
+
+@testable import MobileRosetta
+
+class JsonExampleSpec: QuickSpec {
+    override func spec() {
+        describe("The example"){
+            let example = JsonExample()
+            let collection = example.parseJsonText(jsonString)
+
+            it("map raw json key 'author_id' to 'id' in Author data class") {
+                guard let page = collection?.entries?[1] else {
+                    expect("page should exist").to(equal(" but no page found"))
+                    return
+                }
+                expect(page.author?.id).to(equal(1422))
+            }
+
+            it("parse json data from string") {
+                expect(collection).toNot(beNil())
+                expect(collection?.title).to(equal("Main Collection"))
+                expect(collection?.entries?.count).to(equal(2))
+                expect(collection?.entries?[1].author?.name).to(equal("Author 1"))
+            }
+        }
+    }
+}
+
+
+let jsonString = """
+{
+    "title": "Main Collection",
+    "entry_list": [
+        {
+            "title": "First Model",
+            "pageid": 2442
+        },
+        {
+            "title": "Second Model",
+            "pageid": 2553,
+            "extra": "value ignored",
+            "author": {
+                "name": "Author 1",
+                "author_id": 1422
+            }
+        }
+    ]
+}
+"""
+</code></pre></div></div></div></div></body></html>

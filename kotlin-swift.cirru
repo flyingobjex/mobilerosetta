@@ -22,6 +22,12 @@ html
       :href https://github.com/flyingobjex/swift-is-like-go
       img#fork-me (:src ./fork-me.png)
     #note
+      = "A collection of common tasks and their equivalent solutions presented side-by-side in Kotlin, Javascript and Swift."
+      br
+      = "Central Resource: "
+      a (:href http://www.mobilerosetta.org) (:target _blank)
+        = "www.mobilerosetta.org"
+      br
       = "Forked from the original:"
       a (:href https://github.com/jiyinyiyong/swift-is-like-go) (:target _blank)
         = "Swift is like GO"
@@ -34,24 +40,26 @@ html
     .section
       .title "Rx Observer - Basic Subscribe & Update"
       .case (.name "Function") $ .pair
-        .card (.lang Javascript) $ pre.code $ code.javascript (@insert code-bdd/RxObserverExample.js)
         .card (.lang Kotlin) $ pre.code $ code.swift (@insert code-bdd/RxObserverExample.kt)
+        .card (.lang Swift) $ pre.code $ code.swift (@insert code-bdd/RxObserverExample.swift)
       .case (.name "Model") $ .pair
-        .card (.lang Javascript) $ pre.code $ code.javascript (@insert code-bdd/Model.js)
         .card (.lang Kotlin) $ pre.code $ code.swift (@insert code-bdd/Model.kt)
+        .card (.lang Swift) $ pre.code $ code.swift (@insert code-bdd/Model.swift)
       .case (.name "Tests") $ .pair
-        .card (.lang Javascript) $ pre.code $ code.javascript (@insert code-bdd/RxObserverExampleSpec.js)
         .card (.lang Kotlin) $ pre.code $ code.swift (@insert code-bdd/RxObserverExampleSpec.kt)
+        .card (.lang Swift) $ pre.code $ code.swift (@insert code-bdd/RxObserverExampleSpec.swift)
 
+    a (:name "json1")(:target: _self)
+    br
     .section
       .title "JSON Parsing"
       .case (.name "Function") $ .pair
-        .card (.lang Javascript) $ pre.code $ code.swift (@insert code-bdd/JsonExample.js)
         .card (.lang Kotlin) $ pre.code $ code.swift (@insert code-bdd/JsonExample.kt)
+        .card (.lang Swift) $ pre.code $ code.swift (@insert code-bdd/JsonExample.swift)
       .case (.name "Model") $ .pair
-        .card (.lang Javascript) $ pre.code $ code.swift (@insert code-bdd/Model.js)
         .card (.lang Kotlin) $ pre.code $ code.swift (@insert code-bdd/Model.kt)
+        .card (.lang Swift) $ pre.code $ code.swift (@insert code-bdd/Model.swift)
       .case (.name "Tests") $ .pair
-        .card (.lang Javascript) $ pre.code $ code.swift (@insert code-bdd/JsonExampleSpec.js)
         .card (.lang Kotlin) $ pre.code $ code.swift (@insert code-bdd/JsonExampleSpec.kt)
+        .card (.lang Swift) $ pre.code $ code.swift (@insert code-bdd/JsonExampleSpec.swift)
 

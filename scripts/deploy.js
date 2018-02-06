@@ -8,12 +8,22 @@ c.on('ready', function() {
   c.put('../build/index.html', 'index.html', function(err) {
     if (err) throw err;
     console.log("finishing main upload");
-    c.put('../build/js-kt.html', 'js-kt.html', function(err) {
+
+    c.put('../build/js-kotlin.html', 'js-kotlin.html', function(err) {
       if (err) throw err;
-      console.log("finishing js-kt upload");
-      c.end();
+      console.log("finishing js-kotlin upload");
+
+      c.put('../build/kotlin-swift.html', 'kotlin-swift.html', function(err) {
+        if (err) throw err;
+        console.log("finishing kotlin-swift upload");
+
+        c.put('../build/js-swift.html', 'js-swift.html', function(err) {
+          if (err) throw err;
+          console.log("finishing js-swift upload");
+          c.end();
+        });
+      });
     });
-    // c.end();
   });
 
 

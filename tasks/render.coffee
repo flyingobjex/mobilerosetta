@@ -19,11 +19,31 @@ main = ->
 main()
 
 
-jskt = ->
-  script = fs.readFileSync (path.join __dirname, '../js-kt.cirru'), 'utf8'
+jsWithkotlin = ->
+  script = fs.readFileSync (path.join __dirname, '../js-kotlin.cirru'), 'utf8'
   # index.cirru shoud base PWD, i.e. project root
-  html = cirruHtml.render script, {'@filename': 'js-kt.cirru'}
-  fs.writeFileSync (path.join __dirname, '../build/js-kt.html'), html
-  console.log 'Wrote to build/js-kt.html'
+  html = cirruHtml.render script, {'@filename': 'js-kotlin.cirru'}
+  fs.writeFileSync (path.join __dirname, '../build/js-kotlin.html'), html
+  console.log 'Wrote to build/js-kotlin.html'
 
-jskt()
+jsWithkotlin()
+
+
+jsWithswift = ->
+  script = fs.readFileSync (path.join __dirname, '../js-swift.cirru'), 'utf8'
+  # index.cirru shoud base PWD, i.e. project root
+  html = cirruHtml.render script, {'@filename': 'js-swift.cirru'}
+  fs.writeFileSync (path.join __dirname, '../build/js-swift.html'), html
+  console.log 'Wrote to build/js-swift.html'
+
+jsWithswift()
+
+
+kotlinWithswift = ->
+  script = fs.readFileSync (path.join __dirname, '../kotlin-swift.cirru'), 'utf8'
+  # index.cirru shoud base PWD, i.e. project root
+  html = cirruHtml.render script, {'@filename': 'kotlin-swift.cirru'}
+  fs.writeFileSync (path.join __dirname, '../build/kotlin-swift.html'), html
+  console.log 'Wrote to build/kotlin-swift.html'
+
+kotlinWithswift()
