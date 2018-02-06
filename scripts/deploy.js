@@ -25,15 +25,6 @@ c.on('ready', function() {
       });
     });
   });
-
-
 });
-// connect to localhost:21 as anonymous
-var config = {
-  "host": "ftp.rekawl.com",
-  "user": "rose@learn.mobilerosetta.org",
-  "port": 21,
-  "password":"Social2014"
-
-};
+var config = require('../config/config');
 c.connect(config);
