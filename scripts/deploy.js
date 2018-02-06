@@ -26,5 +26,6 @@ c.on('ready', function() {
     });
   });
 });
+
 var config = require('../config/config');
 c.connect(config);

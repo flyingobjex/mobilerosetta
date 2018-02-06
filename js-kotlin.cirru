@@ -22,19 +22,37 @@ html
       :href https://github.com/flyingobjex/swift-is-like-go
       img#fork-me (:src ./fork-me.png)
     #note
-      = "A collection of common tasks and their equivalent solutions presented side-by-side in Kotlin, Javascript and Swift."
+      = "Forked from the original: "
+      a (:href https://github.com/jiyinyiyong/swift-is-like-go) (:target _blank)
+        = " Swift is like GO"
       br
+      = "Inspired by and a continuation of: "
+      a (:href https://derek-watson.github.io/swift-kotlin-js/) (:target _blank)
+        = " Swift is like Kotlin is like JS"
+      br
+      h3
+        = "A collection of common tasks and their equivalent solutions presented side-by-side in Kotlin, Javascript and Swift."
       = "Central Resource: "
       a (:href http://www.mobilerosetta.org) (:target _blank)
-        = "www.mobilerosetta.org"
+        = " www.mobilerosetta.org"
       br
-      = "Forked from the original:"
-      a (:href https://github.com/jiyinyiyong/swift-is-like-go) (:target _blank)
-        = "Swift is like GO"
       br
-      = "Inspired by and a continuation of:"
-      a (:href https://derek-watson.github.io/swift-kotlin-js/) (:target _blank)
-        = "Swift is like Kotlin is like JS"
+      = "JS <-> Swift:"
+        a (:href ./js-swift.html) (:target _self)
+          = "JS <-> Swift"
+      br
+      = "JS <-> Kotlin:"
+        a (:href ./js-kotlin.html) (:target _self)
+          = "JS <-> Kotlin"
+      br
+      = "Kotlin <-> Swift:"
+        a (:href ./kotlin-swift.html) (:target _self)
+          = "Kotlin <-> Swift"
+      br
+      br
+      = "Kotlin <-> JS <-> Swift:"
+        a (:href ./index.html) (:target _self)
+          = "Kotlin <-> JS <-> Swift"
 
 
     .section
