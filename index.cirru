@@ -3,7 +3,7 @@ doctype
 
 html
   head
-    title "Swift is like Go"
+    title "MobileRosetta : Javascript - Kotlin - Swift Langauge Comparison Reference"
     meta (:charset utf-8)
     link (:rel icon)
       :href http://logo.cirru.org/cirru-32x32.png
@@ -20,7 +20,7 @@ html
   body
     a (:target _blank)
       :href https://github.com/flyingobjex/swift-is-like-go
-      img#fork-me (:src http://jiyinyiyong.u.qiniudn.com/fork-me.png)
+      img#fork-me (:src ./fork-me.png)
     #note
       = "Fork the repo if you want to help improve it. :)"
       br
@@ -64,7 +64,10 @@ html
         .card (.lang Swift) $ pre.code $ code.swift (@insert code-bdd/JsonExampleSpec.swift)
 
     .section
-      .title BASICS
+      = " The examples below are from: "
+      a (:href https://derek-watson.github.io/swift-kotlin-js/) (:target _blank)
+        = "Swift is like Kotlin is like JS"
+      .title "BASICS"
       .case (.name "Hello World") $ .pair
         .card (.lang Swift) $ pre.code $ code (@insert code/hello-world.swift)
         .card (.lang Kotlin) $ pre.code $ code (@insert code/hello-world.kt)

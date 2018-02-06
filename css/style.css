@@ -7,6 +7,11 @@ body * {
     box-sizing: border-box;
 }
 
+a:visited {
+    color: #888888;
+}
+
+
 .section {
     background-color: #f4f4f4;
     padding: 4em 3em;
