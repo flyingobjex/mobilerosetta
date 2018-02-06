@@ -17,3 +17,13 @@ main = ->
   console.log 'Wrote to build/index.html'
 
 main()
+
+
+jskt = ->
+  script = fs.readFileSync (path.join __dirname, '../js-kt.cirru'), 'utf8'
+  # index.cirru shoud base PWD, i.e. project root
+  html = cirruHtml.render script, {'@filename': 'js-kt.cirru'}
+  fs.writeFileSync (path.join __dirname, '../build/js-kt.html'), html
+  console.log 'Wrote to build/js-kt.html'
+
+jskt()

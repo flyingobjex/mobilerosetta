@@ -22,7 +22,11 @@ html
       :href https://github.com/flyingobjex/swift-is-like-go
       img#fork-me (:src ./fork-me.png)
     #note
-      = "Fork the repo if you want to help improve it. :)"
+      = "A collection of common tasks and their equivalent solutions presented side-by-side in Kotlin, Javascript and Swift."
+      br
+      = "Central Resource: "
+      a (:href http://www.mobilerosetta.org) (:target _blank)
+        = "www.mobilerosetta.org"
       br
       = "Forked from the original:"
       a (:href https://github.com/jiyinyiyong/swift-is-like-go) (:target _blank)
@@ -48,6 +52,8 @@ html
         .card (.lang Kotlin) $ pre.code $ code.swift (@insert code-bdd/RxObserverExampleSpec.kt)
         .card (.lang Swift) $ pre.code $ code.swift (@insert code-bdd/RxObserverExampleSpec.swift)
 
+    a (:name "json1")(:target: _self)
+    br
     .section
       .title "JSON Parsing"
       .case (.name "Function") $ .pair
