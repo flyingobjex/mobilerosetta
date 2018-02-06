@@ -1,5 +1,5 @@
-func makeIncrementer() -> (Int -> Int) {
-    func addOne(number: Int) -> Int {
+function makeIncrementer() {
+    let addOne = function(number) {
         return 1 + number
     }
     return addOne

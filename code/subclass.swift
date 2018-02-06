@@ -1,6 +1,6 @@
 class NamedShape {
     var numberOfSides: Int = 0
-    var name: String
+    let name: String
 
     init(name: String) {
         self.name = name
@@ -17,7 +17,7 @@ class Square: NamedShape {
     init(sideLength: Double, name: String) {
         self.sideLength = sideLength
         super.init(name: name)
-        numberOfSides = 4
+        self.numberOfSides = 4
     }
 
     func area() -> Double {
@@ -25,8 +25,8 @@ class Square: NamedShape {
     }
 
     override func simpleDescription() -> String {
-        return "A square with sides of length
-                \(sideLength)."
+        return "A square with sides of length " +
+	       sideLength + "."
     }
 }
 

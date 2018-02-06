@@ -1,6 +1,6 @@
-func sumOf(_ numbers: Int...) -> Int {
+fun sumOf(vararg numbers: Int): Int {
     var sum = 0
-    for number in numbers {
+    for (number in numbers) {
         sum += number
     }
     return sum

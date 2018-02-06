@@ -1,0 +1,2 @@
+let emptyArray = []
+let emptyDictionary = {}
