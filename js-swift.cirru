@@ -6,7 +6,7 @@ html
     title "MobileRosetta : Javascript - Kotlin - Swift Langauge Comparison Reference"
     meta (:charset utf-8)
     link (:rel icon)
-      :href http://logo.cirru.org/cirru-32x32.png
+      :href ./icon.png
       :type image/png
     link (:rel stylesheet)
       :href https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/styles/github.min.css

@@ -1,43 +1,34 @@
-import { expect } from 'chai';
-import { RxObserverExample } from "../src/RxObserverExample";
-import { Author } from '../src/Model';
+require('chai').should();
+import {expect} from 'chai';
+import {RxObserverExample} from "../src/RxObserverExample";
+import {Section} from '../src/Model';
 
 describe('RxObserver example', function () {
 
   let example = new RxObserverExample();
 
-  beforeEach(function() {
+  beforeEach(function () {
     example = new RxObserverExample();
   });
 
-  it("given an observable author, when an update is made, the code block should run", function(){
-    example.author.subscribe((a) => {
-      expect(a.name).to.equal("Next 1");
-      expect(a.id).to.equal(3422);
-      expect(example.describe()).to.equal("Author: Next 1, ID: 3422")
+  it("given an observable Section, " +
+      "then it should send values to the subscribers " +
+      "causing the 'subscribe' code block to run", function () {
+    example.details.should.equal("H:++, P:0, S:0");
+    // expect(example.details).to.equal("H:++, P:0, S:0");
+
+    let values = "";
+    example.section.subscribe((it) => {
+      values += it.heading + ","
     });
-    example.author.next(new Author("Next 1", 3422));
-  });
 
-  it("Handling Undefined- given an author with no name or id, it should return 'default' and 999", function(){
-    example.author.next();
-    expect(example.describe()).to.equal("Author: default, ID: 999")
-  });
+    example.section.next(new Section("H1", [{"id": 1, "body": ""}], []));
+    example.details.should.equal("H:H1, P:1, S:0");
 
-  it("Handling Partially undefined - given an author with only id, it should return 'Author: no name'", function(){
-    example.author.next(new Author(null, 555));
-    expect(example.describe()).to.equal("Author: no name, ID: 555")
-  });
+    example.section.next(new Section("H2", [{"id": 2, "body": ""}], []));
+    example.description().should.equal("Details for section :: H:H2, P:1, S:0");
 
-  it("when a subscription is updated, the description method should match", function(){
-    example.author.next(new Author("Mr Brontosaurus", 9950));
-    expect(example.describe()).to.equal("Author: Mr Brontosaurus, ID: 9950");
-
-    example.author.next(new Author("Next 1", 3422));
-    expect(example.describe()).to.equal("Author: Next 1, ID: 3422");
-
-    example.author.next(new Author("Next 2", 7788));
-    expect(example.describe()).to.equal("Author: Next 2, ID: 7788")
+    expect(values).to.equal("++,H1,H2,")
   });
 
 });

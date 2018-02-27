@@ -1,4 +1,4 @@
-<!DOCTYPE html><html><head><title>MobileRosetta : Javascript - Kotlin - Swift Langauge Comparison Reference</title><meta charset="utf-8"><link rel="icon" href="http://logo.cirru.org/cirru-32x32.png" type="image/png"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/styles/github.min.css"><style>body {
+<!DOCTYPE html><html><head><title>MobileRosetta : Javascript - Kotlin - Swift Langauge Comparison Reference</title><meta charset="utf-8"><link rel="icon" href="./icon.png" type="image/png"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/styles/github.min.css"><style>body {
     font-family: "Helvetica Neue", sans-serif;
     margin: 0;
 }
@@ -95,23 +95,28 @@ a:visited {
     letter-spacing: 0.05em;
 }
 </style><script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/highlight.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/languages/go.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/languages/swift.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/languages/kotlin.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/languages/javascript.min.js"></script><script defer="true">hljs.initHighlightingOnLoad();</script></head><body><a target="_blank" href="https://github.com/flyingobjex/swift-is-like-go"><img id="fork-me" src="./fork-me.png"></a><div id="note">Forked from the original: <a href="https://github.com/jiyinyiyong/swift-is-like-go" target="_blank"> Swift is like GO</a><br>Inspired by and a continuation of: <a href="https://derek-watson.github.io/swift-kotlin-js/" target="_blank"> Swift is like Kotlin is like JS</a><br><h3>A collection of common tasks and their equivalent solutions presented side-by-side in Kotlin, Javascript and Swift.</h3>Central Resource: <a href="http://www.mobilerosetta.org" target="_blank"> www.mobilerosetta.org</a><br><br>JS <-> Swift: <a href="./js-swift.html" target="_self">JS <-> Swift</a><br>JS <-> Kotlin: <a href="./js-kotlin.html" target="_self">JS <-> Kotlin</a><br>Kotlin <-> Swift: <a href="./kotlin-swift.html" target="_self">Kotlin <-> Swift</a><br><br>Kotlin <-> JS <-> Swift: <a href="./index.html" target="_self">Kotlin <-> JS <-> Swift</a></div><div class="section"><div class="title">Rx Observer - Basic Subscribe & Update</div><div class="case"><div class="name">Function</div><div class="pair"><div class="card"><div class="lang">Javascript</div><pre class="code"><code class="javascript">import Rx from 'rxjs'
-import { Author } from './Model'
+import { Section } from './Model'
 
 export class RxObserverExample {
 
   constructor(){
 
-    const self = this;
+    const self = this; // capture this for subscribe blocks
+    let initialValue = new Section("++", [], []);
 
-    this.author = new Rx.Subject();
-    this.author.subscribe((a = new Author()) => { // add default value to prevent undefined
-      self.currentName = a.name || 'no name';
-      self.currentID = a.id || 999;
+    this.details = "H:++, S:++, P:++";
+    this.section = new Rx.BehaviorSubject(initialValue);
+
+    this.section.subscribe((it = new Section()) => { // add default value to prevent undefined
+      self.details =
+          `H:${it.heading || "--"}, ` +                // conditional assignment, elvis symbol
+          `P:${it.paragraphs.length || 0}, ` +  // using -1 to distinguish null/undefined
+          `S:${it.sections.length || 0}`      // optional method call, optional assignment, elvis symbol
     });
   }
 
-  describe() {
-    return `Author: ${this.currentName || -1}, ID: ${this.currentID || 'empty'}`
+  description() {
+    return "Details for section :: " + this.details  // getter shorthand
   }
 }
 </code></pre></div><div class="card"><div class="lang">Swift</div><pre class="code"><code class="swift">import Foundation
@@ -119,98 +124,185 @@ import RxSwift
 
 class RxObserverExample {
 
-    let author:PublishSubject&lt;Author> = PublishSubject&lt;Author>()
-
-    private var currentName:String? = nil
-    private var currentAuthorID:Int? = nil
+    let section: BehaviorSubject&lt;Section> =
+            BehaviorSubject&lt;Section>(value: Section("++", [Paragraph](), [Section]()))
 
     private var dispose = DisposeBag()
-    
+
     init() {
-        author.subscribe(onNext:{ a in
-            self.currentName = a.name
-            self.currentAuthorID = a.id
-        }).disposed(by: dispose)
+        section.subscribe(onNext: { it in                   // Rx subscription
+            print("onNext() section heading = \(it.heading)")
+            self.details =
+                    "H:\(it.heading ?? "--"), " +          // conditional assignment ??
+                    "P:\(it.paragraphs.count), " +
+                    "S:\(it.sections?.count ?? -1)"    // conditional assignment ??
+        })
     }
 
-    func description() -> String {
-        return "Author: \(currentName ?? "no name"), ID: \(currentAuthorID ?? 999)"
+    private (set) var details: String = "H:++, P:++, S:++"  // private setter, public getter
+
+    var description: String {  // getter
+        get {
+            return "Details for section :: " + details
+        }
     }
 }
-</code></pre></div></div></div><div class="case"><div class="name">Model</div><div class="pair"><div class="card"><div class="lang">Javascript</div><pre class="code"><code class="javascript">export class Author {
-  constructor(name = "default", id = 999) {
-    this.name = name;
+</code></pre></div></div></div><div class="case"><div class="name">Model</div><div class="pair"><div class="card"><div class="lang">Javascript</div><pre class="code"><code class="javascript">export class WikiPage {
+  constructor(title = "none", id = -1, sections = []) {
+    this.title = title;
     this.id = id;
+    this.sections = sections;
   }
 }
+
+export class Section {
+  constructor(heading = "--", paragraphs = [], sections = []) {
+    this.heading = heading;
+    this.paragraphs = paragraphs;
+    this.sections = sections;
+  }
+}
+
+export class Paragraph {
+  constructor(id = -1, body = "--") {
+    this.id = id;
+    this.body = body;
+  }
+}
+
+export let data =
+`{
+  "title": "Wiki Page Title",
+  "pageid": 313,
+  "sections": [
+      {
+        "heading": "First Section",
+        "paragraphs_list": [
+            {
+              "paragraph_id": 1,
+              "body": "Word1 word2 word3"
+            }
+            ],
+        "sections":[
+            {
+              "heading": "First SubSection",
+              "paragraphs_list": [
+                  {
+                    "paragraph_id": 2,
+                    "body": "Word4 word5 word6"
+                  },
+                  {
+                    "paragraph_id": 3,
+                    "body": "Word7 word8 word9"
+                  }
+                  ]}]}]}`;
 </code></pre></div><div class="card"><div class="lang">Swift</div><pre class="code"><code class="swift">import Foundation
 
-struct Page: Codable {
-    let title:String?, pageid:Int?, author:Author?
-}
-
-struct Author: Codable {
-    enum CodingKeys : String, CodingKey {
-        case name
-        case id = "author_id"
-    }
-
-    let name:String?, id:Int?
-    init(_ name:String?, _ id:Int?) {
-        self.name = name
-        self.id = id
-    }
-    
-}
-
-struct PageCollection: Codable {
-    enum CodingKeys : String, CodingKey {
+struct WikiPage: Codable {
+    enum CodingKeys: String, CodingKey {
+        case id = "pageid"
         case title
-        case entries = "entry_list"
+        case sections
     }
+    let title: String, id: Int, sections: Array&lt;Section>
 
-    let title:String?, entries:Array&lt;Page>?
+    init(_ title: String = "none",
+         _ id:Int = -1,
+         _ sections:Array&lt;Section>) {
+        self.title = title
+        self.id = id
+        self.sections = sections
+    }
 }
-</code></pre></div></div></div><div class="case"><div class="name">Tests</div><div class="pair"><div class="card"><div class="lang">Javascript</div><pre class="code"><code class="javascript">import { expect } from 'chai';
-import { RxObserverExample } from "../src/RxObserverExample";
-import { Author } from '../src/Model';
+
+struct Section: Codable {
+    enum CodingKeys: String, CodingKey {
+        case heading
+        case paragraphs = "paragraphs_list"
+        case sections
+    }
+    let heading: String?, paragraphs: Array&lt;Paragraph>, sections: Array&lt;Section>?
+
+    init(_ heading:String?,
+         _ paragraphs:Array&lt;Paragraph>,
+         _ sections:Array&lt;Section>?){
+        self.heading = heading
+        self.paragraphs = paragraphs
+        self.sections = sections
+    }
+}
+
+struct Paragraph:Codable {
+    enum CodingKeys: String, CodingKey {
+        case id = "paragraph_id"
+        case body
+    }
+    let id: Int, body: String
+
+    init(_ id:Int, _ body:String){
+        self.id = id
+        self.body = body
+    }
+}
+
+struct ExampleData {
+    let json = """
+{
+  "title": "Wiki Page Title",
+  "pageid": 313,
+  "sections": [
+    {
+      "heading": "First Section",
+      "paragraphs_list": [
+        {
+          "paragraph_id": 1,
+          "body": "Word1 word2 word3"
+        }
+      ],
+      "sections":[
+        {
+          "heading": "First SubSection",
+          "paragraphs_list": [
+            {
+              "paragraph_id": 2,
+              "body": "Word4 word5 word6"
+            },
+            {
+              "paragraph_id": 3,
+              "body": "Word7 word8 word9"
+            }]}]}]}
+"""}
+</code></pre></div></div></div><div class="case"><div class="name">Tests</div><div class="pair"><div class="card"><div class="lang">Javascript</div><pre class="code"><code class="javascript">require('chai').should();
+import {expect} from 'chai';
+import {RxObserverExample} from "../src/RxObserverExample";
+import {Section} from '../src/Model';
 
 describe('RxObserver example', function () {
 
   let example = new RxObserverExample();
 
-  beforeEach(function() {
+  beforeEach(function () {
     example = new RxObserverExample();
   });
 
-  it("given an observable author, when an update is made, the code block should run", function(){
-    example.author.subscribe((a) => {
-      expect(a.name).to.equal("Next 1");
-      expect(a.id).to.equal(3422);
-      expect(example.describe()).to.equal("Author: Next 1, ID: 3422")
+  it("given an observable Section, " +
+      "then it should send values to the subscribers " +
+      "causing the 'subscribe' code block to run", function () {
+    example.details.should.equal("H:++, P:0, S:0");
+    // expect(example.details).to.equal("H:++, P:0, S:0");
+
+    let values = "";
+    example.section.subscribe((it) => {
+      values += it.heading + ","
     });
-    example.author.next(new Author("Next 1", 3422));
-  });
 
-  it("Handling Undefined- given an author with no name or id, it should return 'default' and 999", function(){
-    example.author.next();
-    expect(example.describe()).to.equal("Author: default, ID: 999")
-  });
+    example.section.next(new Section("H1", [{"id": 1, "body": ""}], []));
+    example.details.should.equal("H:H1, P:1, S:0");
 
-  it("Handling Partially undefined - given an author with only id, it should return 'Author: no name'", function(){
-    example.author.next(new Author(null, 555));
-    expect(example.describe()).to.equal("Author: no name, ID: 555")
-  });
+    example.section.next(new Section("H2", [{"id": 2, "body": ""}], []));
+    example.description().should.equal("Details for section :: H:H2, P:1, S:0");
 
-  it("when a subscription is updated, the description method should match", function(){
-    example.author.next(new Author("Mr Brontosaurus", 9950));
-    expect(example.describe()).to.equal("Author: Mr Brontosaurus, ID: 9950");
-
-    example.author.next(new Author("Next 1", 3422));
-    expect(example.describe()).to.equal("Author: Next 1, ID: 3422");
-
-    example.author.next(new Author("Next 2", 7788));
-    expect(example.describe()).to.equal("Author: Next 2, ID: 7788")
+    expect(values).to.equal("++,H1,H2,")
   });
 
 });
@@ -225,161 +317,215 @@ import RxSwift
 
 class RxObserverExampleSpec: QuickSpec {
     override func spec() {
+        describe("The RxObserver example") {
+            var dispose = DisposeBag()
+            it("given an observable Section, when an update is made, " +
+                    "then it should send values to the subscribers " +
+                    "causing the 'subscribe' code block to run") {
+                let example = RxObserverExample()
+                expect(example.details).to(equal("H:++, P:0, S:0"))
 
-        describe("The RxObserver example"){
-            var example:RxObserverExample = RxObserverExample()
-            var dispose:DisposeBag = DisposeBag()
-            
-            beforeEach {
-                example = RxObserverExample()
-                dispose = DisposeBag()
-            }
-            
-            it("given an observable author, when an update is made, a given code block should run"){
-                let _ = example.author.subscribe({ event in
-                    expect(event.element?.id).to(equal(2223))
-                })
-                
-                example.author.subscribe({
-                    expect($0.element?.name).to(equal("New Author"))
+                var values = ""
+                example.section.subscribe(onNext: { it in
+                    values += it.heading! + ","      // conditional assignment
                 }).disposed(by: dispose)
-                
-                example.author.onNext(Author("New Author", 2223))
-            }
-            
-            it("when a subscription is updated, it should reflect the new values"){
-                example.author.onNext(Author("Next Author", 1414))
-                expect(example.description()).to(equal("Author: Next Author, ID: 1414"))
-            }
-            
-            it("given an author with no name or id, it should return 'no name' and 999"){
-                example.author.onNext(Author(nil, nil))
-                expect(example.description()).to(equal("Author: no name, ID: 999"))
-            }
-            
-            it("optional code block should execute") {
-                let _ = example.author.subscribe({
-                    if let id = $0.element?.id {
-                        print("block should execute")
-                        expect(id).to(equal(3322))
-                    }
-                    
-                    if let _ = $0.element?.name {
-                        print("!! code should not execute !!")
-                    }
-                })
-                
-                example.author.onNext(Author(nil, 3322))
+
+                example.section.onNext(Section("H1", [Paragraph(1, "")], [Section]()))
+                expect(example.details).to(equal("H:H1, P:1, S:0"))
+
+                example.section.onNext(Section("H2", [Paragraph](), nil))
+                expect(example.description).to(equal("Details for section :: H:H2, P:0, S:-1"))
+
+                expect(values).to(equal("++,H1,H2,"))
             }
         }
     }
 }
-</code></pre></div></div></div></div><a name="json1" target="_self"></a><br><div class="section"><div class="title">JSON Parsing</div><div class="case"><div class="name">Function</div><div class="pair"><div class="card"><div class="lang">Javascript</div><pre class="code"><code class="swift">export function parseJsonText(text) {
-  let collection = JSON.parse(text);
-  return {
-    "title":collection.title || "none",
-    "entries": collection.entry_list.map(e => {
-      if (e.author){
-        e.author.id = e.author.author_id || 0;
-      }
-      return e
-    })
-  };
+</code></pre></div></div></div></div><a name="json1" target="_self"></a><br><div class="section"><div class="title">JSON Parsing</div><div class="case"><div class="name">Function</div><div class="pair"><div class="card"><div class="lang">Javascript</div><pre class="code"><code class="swift">import {Paragraph, WikiPage} from "./Model";
+
+export function parse(text) {
+  let rawJson = JSON.parse(text);
+
+  let sections = rawJson.sections.map(sec => {
+    return remapSection(sec)
+  });
+
+  return new WikiPage(rawJson.title, rawJson.pageid, sections)
 }
 
+function remapSection(section) {
+  let mappedSection = {};
+
+  mappedSection.heading = section.heading;
+  mappedSection.paragraphs = section.paragraphs_list.map(function (it) {
+    return new Paragraph(it.paragraph_id, it.body)
+  });
+
+  if (section.sections) {
+    mappedSection.sections = section.sections.map(function (it) {
+      return remapSection(it)
+    });
+  }
+  return mappedSection;
+}
 </code></pre></div><div class="card"><div class="lang">Swift</div><pre class="code"><code class="swift">import Foundation
 
 class JsonExample {
-
-    func parseJsonText(_ text:String) -> PageCollection? {
+    func parse(_ text: String) -> WikiPage? {
         let jsonData = text.data(using: .utf8)!
         let decoder = JSONDecoder()
-
         do {
-            let pageCollection = try decoder.decode(PageCollection.self, from: jsonData)
-            return pageCollection
-        }
-
-        catch let error {
+            let page = try decoder.decode(WikiPage.self, from: jsonData)
+            return page
+        } catch let error {
             print("!! error = \(error.localizedDescription)")
         }
-
         return nil
     }
 }
-</code></pre></div></div></div><div class="case"><div class="name">Model</div><div class="pair"><div class="card"><div class="lang">Javascript</div><pre class="code"><code class="swift">export class Author {
-  constructor(name = "default", id = 999) {
-    this.name = name;
+</code></pre></div></div></div><div class="case"><div class="name">Model</div><div class="pair"><div class="card"><div class="lang">Javascript</div><pre class="code"><code class="swift">export class WikiPage {
+  constructor(title = "none", id = -1, sections = []) {
+    this.title = title;
     this.id = id;
+    this.sections = sections;
   }
 }
+
+export class Section {
+  constructor(heading = "--", paragraphs = [], sections = []) {
+    this.heading = heading;
+    this.paragraphs = paragraphs;
+    this.sections = sections;
+  }
+}
+
+export class Paragraph {
+  constructor(id = -1, body = "--") {
+    this.id = id;
+    this.body = body;
+  }
+}
+
+export let data =
+`{
+  "title": "Wiki Page Title",
+  "pageid": 313,
+  "sections": [
+      {
+        "heading": "First Section",
+        "paragraphs_list": [
+            {
+              "paragraph_id": 1,
+              "body": "Word1 word2 word3"
+            }
+            ],
+        "sections":[
+            {
+              "heading": "First SubSection",
+              "paragraphs_list": [
+                  {
+                    "paragraph_id": 2,
+                    "body": "Word4 word5 word6"
+                  },
+                  {
+                    "paragraph_id": 3,
+                    "body": "Word7 word8 word9"
+                  }
+                  ]}]}]}`;
 </code></pre></div><div class="card"><div class="lang">Swift</div><pre class="code"><code class="swift">import Foundation
 
-struct Page: Codable {
-    let title:String?, pageid:Int?, author:Author?
-}
-
-struct Author: Codable {
-    enum CodingKeys : String, CodingKey {
-        case name
-        case id = "author_id"
-    }
-
-    let name:String?, id:Int?
-    init(_ name:String?, _ id:Int?) {
-        self.name = name
-        self.id = id
-    }
-    
-}
-
-struct PageCollection: Codable {
-    enum CodingKeys : String, CodingKey {
+struct WikiPage: Codable {
+    enum CodingKeys: String, CodingKey {
+        case id = "pageid"
         case title
-        case entries = "entry_list"
+        case sections
     }
+    let title: String, id: Int, sections: Array&lt;Section>
 
-    let title:String?, entries:Array&lt;Page>?
+    init(_ title: String = "none",
+         _ id:Int = -1,
+         _ sections:Array&lt;Section>) {
+        self.title = title
+        self.id = id
+        self.sections = sections
+    }
 }
-</code></pre></div></div></div><div class="case"><div class="name">Tests</div><div class="pair"><div class="card"><div class="lang">Javascript</div><pre class="code"><code class="swift">import { expect } from 'chai';
-import { parseJsonText } from "../src/JsonExample";
 
-let jsonString = `
-  {
-    "title": "Main Collection",
-    "entry_list": [
-      {
-        "title": "First Model",
-        "pageid": 2442
-      },
-      {
-        "title": "Second Model",
-        "pageid": 2553,
-        "extra": "value ignored",
-        "author": {
-          "name": "Author 1",
-          "author_id": 1422
+struct Section: Codable {
+    enum CodingKeys: String, CodingKey {
+        case heading
+        case paragraphs = "paragraphs_list"
+        case sections
+    }
+    let heading: String?, paragraphs: Array&lt;Paragraph>, sections: Array&lt;Section>?
+
+    init(_ heading:String?,
+         _ paragraphs:Array&lt;Paragraph>,
+         _ sections:Array&lt;Section>?){
+        self.heading = heading
+        self.paragraphs = paragraphs
+        self.sections = sections
+    }
+}
+
+struct Paragraph:Codable {
+    enum CodingKeys: String, CodingKey {
+        case id = "paragraph_id"
+        case body
+    }
+    let id: Int, body: String
+
+    init(_ id:Int, _ body:String){
+        self.id = id
+        self.body = body
+    }
+}
+
+struct ExampleData {
+    let json = """
+{
+  "title": "Wiki Page Title",
+  "pageid": 313,
+  "sections": [
+    {
+      "heading": "First Section",
+      "paragraphs_list": [
+        {
+          "paragraph_id": 1,
+          "body": "Word1 word2 word3"
         }
-      }
-    ]
-  }`;
+      ],
+      "sections":[
+        {
+          "heading": "First SubSection",
+          "paragraphs_list": [
+            {
+              "paragraph_id": 2,
+              "body": "Word4 word5 word6"
+            },
+            {
+              "paragraph_id": 3,
+              "body": "Word7 word8 word9"
+            }]}]}]}
+"""}
+</code></pre></div></div></div><div class="case"><div class="name">Tests</div><div class="pair"><div class="card"><div class="lang">Javascript</div><pre class="code"><code class="swift">require('chai').should();
+import {data} from "../src/Model"
+import {parse} from "../src/JsonExample";
 
-describe('Json Parsing Example', function(){
+describe('Json Parsing Example', function () {
+  let page = parse(data);
 
-  let collection = parseJsonText(jsonString);
-
-  it('should map raw json key author_id to id in Author data class', function(){
-    expect(collection.entries[1].author.id).to.equal(1422);
+  it("it should map raw json keys 'pageid' to 'id', " +
+      "'paragraphs_list' to 'paragraphs'", function () {
+    page.id.should.equal(313);
+    page.sections[0].sections[0].paragraphs.length.should.equal(2)
   });
 
-
-  it('should parse the json text into an object', function(){
-    console.log("running test");
-    expect(collection).to.be.a('object');
-    expect(collection.title).to.equal("Main Collection");
-    expect(collection.entries).to.be.a('array');
-    expect(collection.entries.length).to.equal(2);
-    expect(collection.entries[1].author.name).to.equal("Author 1");
+  it('should parse json data from string into page', function () {
+    page.should.not.equal(undefined);
+    page.sections.length.should.equal(1);
+    page.sections[0].sections[0].paragraphs[0].body.should.equal("Word4 word5 word6");
+    page.title.should.equal("Wiki Page Title");
   })
 });
 </code></pre></div><div class="card"><div class="lang">Swift</div><pre class="code"><code class="swift">import Foundation
@@ -390,47 +536,24 @@ import Nimble
 
 class JsonExampleSpec: QuickSpec {
     override func spec() {
-        describe("The example"){
+        describe("JSon Parsing Example"){
             let example = JsonExample()
-            let collection = example.parseJsonText(jsonString)
+            let page = example.parse(ExampleData().json)! // force unwrap to streamline tests
 
-            it("map raw json key 'author_id' to 'id' in Author data class") {
-                guard let page = collection?.entries?[1] else {
-                    expect("page should exist").to(equal(" but no page found"))
-                    return
-                }
-                expect(page.author?.id).to(equal(1422))
+            it("should map raw json keys 'pageid' to 'id', 'paragraphs_list' to 'paragraphs'"){
+                expect(page.id).to(equal(313))
+                expect(page.sections[0].sections![0].paragraphs.count)
             }
 
-            it("parse json data from string") {
-                expect(collection).toNot(beNil())
-                expect(collection?.title).to(equal("Main Collection"))
-                expect(collection?.entries?.count).to(equal(2))
-                expect(collection?.entries?[1].author?.name).to(equal("Author 1"))
+            it("should parse json data from string into page"){
+                expect(page).toNot(beNil())
+                expect(page.sections.count).to(equal(1))
+                expect(page.sections[0].sections?[0].paragraphs[0].body).to(equal("Word4 word5 word6"))
+                expect(page.title).to(equal("Wiki Page Title"))
             }
         }
     }
 }
 
 
-let jsonString = """
-{
-    "title": "Main Collection",
-    "entry_list": [
-        {
-            "title": "First Model",
-            "pageid": 2442
-        },
-        {
-            "title": "Second Model",
-            "pageid": 2553,
-            "extra": "value ignored",
-            "author": {
-                "name": "Author 1",
-                "author_id": 1422
-            }
-        }
-    ]
-}
-"""
 </code></pre></div></div></div></div></body></html>

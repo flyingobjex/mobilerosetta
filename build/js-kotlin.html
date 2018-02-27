@@ -1,4 +1,4 @@
-<!DOCTYPE html><html><head><title>MobileRosetta : Javascript - Kotlin - Swift Langauge Comparison Reference</title><meta charset="utf-8"><link rel="icon" href="http://logo.cirru.org/cirru-32x32.png" type="image/png"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/styles/github.min.css"><style>body {
+<!DOCTYPE html><html><head><title>MobileRosetta : Javascript - Kotlin - Swift Langauge Comparison Reference</title><meta charset="utf-8"><link rel="icon" href="./icon.png" type="image/png"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/styles/github.min.css"><style>body {
     font-family: "Helvetica Neue", sans-serif;
     margin: 0;
 }
@@ -95,113 +95,188 @@ a:visited {
     letter-spacing: 0.05em;
 }
 </style><script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/highlight.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/languages/go.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/languages/swift.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/languages/kotlin.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/languages/javascript.min.js"></script><script defer="true">hljs.initHighlightingOnLoad();</script></head><body><a target="_blank" href="https://github.com/flyingobjex/swift-is-like-go"><img id="fork-me" src="./fork-me.png"></a><div id="note">Forked from the original: <a href="https://github.com/jiyinyiyong/swift-is-like-go" target="_blank"> Swift is like GO</a><br>Inspired by and a continuation of: <a href="https://derek-watson.github.io/swift-kotlin-js/" target="_blank"> Swift is like Kotlin is like JS</a><br><h3>A collection of common tasks and their equivalent solutions presented side-by-side in Kotlin, Javascript and Swift.</h3>Central Resource: <a href="http://www.mobilerosetta.org" target="_blank"> www.mobilerosetta.org</a><br><br>JS <-> Swift: <a href="./js-swift.html" target="_self">JS <-> Swift</a><br>JS <-> Kotlin: <a href="./js-kotlin.html" target="_self">JS <-> Kotlin</a><br>Kotlin <-> Swift: <a href="./kotlin-swift.html" target="_self">Kotlin <-> Swift</a><br><br>Kotlin <-> JS <-> Swift: <a href="./index.html" target="_self">Kotlin <-> JS <-> Swift</a></div><div class="section"><div class="title">Rx Observer - Basic Subscribe & Update</div><div class="case"><div class="name">Function</div><div class="pair"><div class="card"><div class="lang">Javascript</div><pre class="code"><code class="javascript">import Rx from 'rxjs'
-import { Author } from './Model'
+import { Section } from './Model'
 
 export class RxObserverExample {
 
   constructor(){
 
-    const self = this;
+    const self = this; // capture this for subscribe blocks
+    let initialValue = new Section("++", [], []);
 
-    this.author = new Rx.Subject();
-    this.author.subscribe((a = new Author()) => { // add default value to prevent undefined
-      self.currentName = a.name || 'no name';
-      self.currentID = a.id || 999;
+    this.details = "H:++, S:++, P:++";
+    this.section = new Rx.BehaviorSubject(initialValue);
+
+    this.section.subscribe((it = new Section()) => { // add default value to prevent undefined
+      self.details =
+          `H:${it.heading || "--"}, ` +                // conditional assignment, elvis symbol
+          `P:${it.paragraphs.length || 0}, ` +  // using -1 to distinguish null/undefined
+          `S:${it.sections.length || 0}`      // optional method call, optional assignment, elvis symbol
     });
   }
 
-  describe() {
-    return `Author: ${this.currentName || -1}, ID: ${this.currentID || 'empty'}`
+  description() {
+    return "Details for section :: " + this.details  // getter shorthand
   }
 }
 </code></pre></div><div class="card"><div class="lang">Kotlin</div><pre class="code"><code class="swift">package org.mobilerosetta.mobilerosetta
 
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.subjects.BehaviorSubject
 
 class RxObserverExample {
 
-    val author = PublishSubject.create&lt;Author>()
+    val initialValue = Section("++", listOf(), listOf())
+    val section = BehaviorSubject.create&lt;Section>()
 
-    private var currentName:String? = null
-    private var currentAuthorID:Int? = null
+    var details: String = "H:++, P:++, S:++"
+        private set
+
+    val description: String
+        get() = "Details for section :: " + details  // getter shorthand
 
     init {
-        author.subscribe { a ->
-            currentName = a.name
-            currentAuthorID = a.id
+        section.onNext(initialValue)
+        section.subscribe {
+            println("onNext() section heading = ${it.heading}")
+            details =
+                    "H:${it.heading
+                            ?: "--"}, " +                // conditional assignment, elvis symbol
+                    "P:${it.paragraphs.count()}, " +
+                    "S:${it.sections?.count()
+                            ?: -1}"      // optional method call, optional assignment, elvis symbol
         }
     }
-
-    fun description():String {
-        return "Author: ${currentName?: "no name"}, ID: ${currentAuthorID?: 999}"
-    }
 }
-</code></pre></div></div></div><div class="case"><div class="name">Model</div><div class="pair"><div class="card"><div class="lang">Javascript</div><pre class="code"><code class="javascript">export class Author {
-  constructor(name = "default", id = 999) {
-    this.name = name;
+</code></pre></div></div></div><div class="case"><div class="name">Model</div><div class="pair"><div class="card"><div class="lang">Javascript</div><pre class="code"><code class="javascript">export class WikiPage {
+  constructor(title = "none", id = -1, sections = []) {
+    this.title = title;
     this.id = id;
+    this.sections = sections;
   }
 }
+
+export class Section {
+  constructor(heading = "--", paragraphs = [], sections = []) {
+    this.heading = heading;
+    this.paragraphs = paragraphs;
+    this.sections = sections;
+  }
+}
+
+export class Paragraph {
+  constructor(id = -1, body = "--") {
+    this.id = id;
+    this.body = body;
+  }
+}
+
+export let data =
+`{
+  "title": "Wiki Page Title",
+  "pageid": 313,
+  "sections": [
+      {
+        "heading": "First Section",
+        "paragraphs_list": [
+            {
+              "paragraph_id": 1,
+              "body": "Word1 word2 word3"
+            }
+            ],
+        "sections":[
+            {
+              "heading": "First SubSection",
+              "paragraphs_list": [
+                  {
+                    "paragraph_id": 2,
+                    "body": "Word4 word5 word6"
+                  },
+                  {
+                    "paragraph_id": 3,
+                    "body": "Word7 word8 word9"
+                  }
+                  ]}]}]}`;
 </code></pre></div><div class="card"><div class="lang">Kotlin</div><pre class="code"><code class="swift">package org.mobilerosetta.mobilerosetta
 
-data class Author(
-        val name:String?,
-        private val author_id:Int?) {
-
-    val id = author_id // direct mapping in lieu of @Json meta tags
+data class WikiPage(
+        val title: String = "none",  // default value in constructor
+        private val pageid: Int = -1,  // re-mapping json
+        val sections: List&lt;Section>) {
+    val id = pageid // re-mapping json
 }
 
-data class Page(
-        val title:String = "none",
-        val pageid:Int = -1,
-        val author:Author?)
-
-data class PageCollection(val title:String?,
-                          val pageid:Int = -1,
-                          private val entry_list:List&lt;Page>) {
-
-    val entries = entry_list // direct mapping in lieu of @Json meta tags
+data class Section(val heading: String?,
+                   private val paragraphs_list: List&lt;Paragraph>,
+                   val sections: List&lt;Section>? = null) { // default value in constructor
+    val paragraphs = paragraphs_list // direct mapping in lieu of @Json meta tags
 }
-</code></pre></div></div></div><div class="case"><div class="name">Tests</div><div class="pair"><div class="card"><div class="lang">Javascript</div><pre class="code"><code class="javascript">import { expect } from 'chai';
-import { RxObserverExample } from "../src/RxObserverExample";
-import { Author } from '../src/Model';
+
+data class Paragraph(val paragraph_id: Int = -1,
+                     val body: String) {
+    val id = paragraph_id
+}
+
+class ExampleData {
+    val json = """
+{
+  "title": "Wiki Page Title",
+  "pageid": 313,
+  "sections": [
+    {
+      "heading": "First Section",
+      "paragraphs_list": [
+        {
+          "paragraph_id": 1,
+          "body": "Word1 word2 word3"
+        }
+      ],
+      "sections":[
+        {
+          "heading": "First SubSection",
+          "paragraphs_list": [
+            {
+              "paragraph_id": 2,
+              "body": "Word4 word5 word6"
+            },
+            {
+              "paragraph_id": 3,
+              "body": "Word7 word8 word9"
+            }
+]}]}]} """
+}
+
+
+</code></pre></div></div></div><div class="case"><div class="name">Tests</div><div class="pair"><div class="card"><div class="lang">Javascript</div><pre class="code"><code class="javascript">require('chai').should();
+import {expect} from 'chai';
+import {RxObserverExample} from "../src/RxObserverExample";
+import {Section} from '../src/Model';
 
 describe('RxObserver example', function () {
 
   let example = new RxObserverExample();
 
-  beforeEach(function() {
+  beforeEach(function () {
     example = new RxObserverExample();
   });
 
-  it("given an observable author, when an update is made, the code block should run", function(){
-    example.author.subscribe((a) => {
-      expect(a.name).to.equal("Next 1");
-      expect(a.id).to.equal(3422);
-      expect(example.describe()).to.equal("Author: Next 1, ID: 3422")
+  it("given an observable Section, " +
+      "then it should send values to the subscribers " +
+      "causing the 'subscribe' code block to run", function () {
+    example.details.should.equal("H:++, P:0, S:0");
+    // expect(example.details).to.equal("H:++, P:0, S:0");
+
+    let values = "";
+    example.section.subscribe((it) => {
+      values += it.heading + ","
     });
-    example.author.next(new Author("Next 1", 3422));
-  });
 
-  it("Handling Undefined- given an author with no name or id, it should return 'default' and 999", function(){
-    example.author.next();
-    expect(example.describe()).to.equal("Author: default, ID: 999")
-  });
+    example.section.next(new Section("H1", [{"id": 1, "body": ""}], []));
+    example.details.should.equal("H:H1, P:1, S:0");
 
-  it("Handling Partially undefined - given an author with only id, it should return 'Author: no name'", function(){
-    example.author.next(new Author(null, 555));
-    expect(example.describe()).to.equal("Author: no name, ID: 555")
-  });
+    example.section.next(new Section("H2", [{"id": 2, "body": ""}], []));
+    example.description().should.equal("Details for section :: H:H2, P:1, S:0");
 
-  it("when a subscription is updated, the description method should match", function(){
-    example.author.next(new Author("Mr Brontosaurus", 9950));
-    expect(example.describe()).to.equal("Author: Mr Brontosaurus, ID: 9950");
-
-    example.author.next(new Author("Next 1", 3422));
-    expect(example.describe()).to.equal("Author: Next 1, ID: 3422");
-
-    example.author.next(new Author("Next 2", 7788));
-    expect(example.describe()).to.equal("Author: Next 2, ID: 7788")
+    expect(values).to.equal("++,H1,H2,")
   });
 
 });
@@ -214,73 +289,71 @@ import io.kotlintest.specs.StringSpec
 
 class RxObserverExampleSpec : StringSpec() {
 
-    val example = RxObserverExample()
-
     init {
+        "given an observable Section, when an update is made, " +
+        "then it should send values to the subscribers " +
+        "causing the 'subscribe' code block to run" {
+            val example = RxObserverExample()
+            example.details shouldBe "H:++, S:0, P:0"
 
-        "given an observable author, when an update is made, the code block should run" {
-            example.author.subscribe { a ->
-                a.name shouldBe "New Author"
-                a.id shouldBe 2223
+            var values = ""  // collects the values of subscription during test
+            example.section.subscribe {
+                values += it.heading + ","
             }
 
-            example.author.onNext(Author("New Author", 2223))
-            example.description() shouldBe "Author: New Author, ID: 2223"
-        }
+            example.section.onNext(Section("H1", listOf(Paragraph(1,"")), listOf()))
+            example.details shouldBe "H:H1, P:1, S:0"
 
-        "when a subscription is updated, it should reflect the new values" {
-            example.author.onNext(Author("Next Author", 1414))
-            example.description() shouldBe "Author: Next Author, ID: 1414"
-        }
+            example.section.onNext(Section("H2", listOf(Paragraph(2,"")), listOf()))
+            example.description shouldBe "Details for section :: H:H2, P:1, S:0"
 
-        "given an author with no name or id, it should return 'no name' and 999" {
-            example.author.onNext(Author(null, null))
-            example.description() shouldBe "Author: no name, ID: 999"
-        }
-
-        "optional code block should execute" {
-            example.author.subscribe { a ->
-                a.id?.let{ 
-                    println("block should execute")
-                    it shouldBe 3322
-                }
-                a.name?.let{ println("!! should not execute !!") }
-            }
-            example.author.onNext(Author(null, 3322))
+            values shouldBe "++,H1,H2,"
         }
     }
 }
-</code></pre></div></div></div></div><div class="section"><div class="title">JSON Parsing</div><div class="case"><div class="name">Function</div><div class="pair"><div class="card"><div class="lang">Javascript</div><pre class="code"><code class="swift">export function parseJsonText(text) {
-  let collection = JSON.parse(text);
-  return {
-    "title":collection.title || "none",
-    "entries": collection.entry_list.map(e => {
-      if (e.author){
-        e.author.id = e.author.author_id || 0;
-      }
-      return e
-    })
-  };
+</code></pre></div></div></div></div><div class="section"><div class="title">JSON Parsing</div><div class="case"><div class="name">Function</div><div class="pair"><div class="card"><div class="lang">Javascript</div><pre class="code"><code class="swift">import {Paragraph, WikiPage} from "./Model";
+
+export function parse(text) {
+  let rawJson = JSON.parse(text);
+
+  let sections = rawJson.sections.map(sec => {
+    return remapSection(sec)
+  });
+
+  return new WikiPage(rawJson.title, rawJson.pageid, sections)
 }
 
-</code></pre></div><div class="card"><div class="lang">Kotlin</div><pre class="code"><code class="swift">package org.mobilerosetta.mobilerosetta
+function remapSection(section) {
+  let mappedSection = {};
 
+  mappedSection.heading = section.heading;
+  mappedSection.paragraphs = section.paragraphs_list.map(function (it) {
+    return new Paragraph(it.paragraph_id, it.body)
+  });
+
+  if (section.sections) {
+    mappedSection.sections = section.sections.map(function (it) {
+      return remapSection(it)
+    });
+  }
+  return mappedSection;
+}
+</code></pre></div><div class="card"><div class="lang">Kotlin</div><pre class="code"><code class="swift">package org.mobilerosetta.mobilerosetta
 import com.squareup.moshi.KotlinJsonAdapterFactory
 import com.squareup.moshi.Moshi
 
 class JsonExample {
 
-    fun parseJsonText(text:String): PageCollection? {
+    fun parse(text: String): WikiPage? {
         val moshi = Moshi.Builder()
                 .add(KotlinJsonAdapterFactory())
                 .build()
 
-        val jsonAdapter = moshi.adapter(PageCollection::class.java)
+        val jsonAdapter = moshi.adapter(WikiPage::class.java)
         try {
-
             jsonAdapter.fromJson(text)?.let { return it }
 
-        } catch (e:Exception) {
+        } catch (e: Exception) {
             println("!! Exception !! e.message = ${e.message}")
             println(e)
         }
@@ -288,117 +361,150 @@ class JsonExample {
         return null
     }
 }
-</code></pre></div></div></div><div class="case"><div class="name">Model</div><div class="pair"><div class="card"><div class="lang">Javascript</div><pre class="code"><code class="swift">export class Author {
-  constructor(name = "default", id = 999) {
-    this.name = name;
+</code></pre></div></div></div><div class="case"><div class="name">Model</div><div class="pair"><div class="card"><div class="lang">Javascript</div><pre class="code"><code class="swift">export class WikiPage {
+  constructor(title = "none", id = -1, sections = []) {
+    this.title = title;
     this.id = id;
+    this.sections = sections;
   }
 }
+
+export class Section {
+  constructor(heading = "--", paragraphs = [], sections = []) {
+    this.heading = heading;
+    this.paragraphs = paragraphs;
+    this.sections = sections;
+  }
+}
+
+export class Paragraph {
+  constructor(id = -1, body = "--") {
+    this.id = id;
+    this.body = body;
+  }
+}
+
+export let data =
+`{
+  "title": "Wiki Page Title",
+  "pageid": 313,
+  "sections": [
+      {
+        "heading": "First Section",
+        "paragraphs_list": [
+            {
+              "paragraph_id": 1,
+              "body": "Word1 word2 word3"
+            }
+            ],
+        "sections":[
+            {
+              "heading": "First SubSection",
+              "paragraphs_list": [
+                  {
+                    "paragraph_id": 2,
+                    "body": "Word4 word5 word6"
+                  },
+                  {
+                    "paragraph_id": 3,
+                    "body": "Word7 word8 word9"
+                  }
+                  ]}]}]}`;
 </code></pre></div><div class="card"><div class="lang">Kotlin</div><pre class="code"><code class="swift">package org.mobilerosetta.mobilerosetta
 
-data class Author(
-        val name:String?,
-        private val author_id:Int?) {
-
-    val id = author_id // direct mapping in lieu of @Json meta tags
+data class WikiPage(
+        val title: String = "none",  // default value in constructor
+        private val pageid: Int = -1,  // re-mapping json
+        val sections: List&lt;Section>) {
+    val id = pageid // re-mapping json
 }
 
-data class Page(
-        val title:String = "none",
-        val pageid:Int = -1,
-        val author:Author?)
-
-data class PageCollection(val title:String?,
-                          val pageid:Int = -1,
-                          private val entry_list:List&lt;Page>) {
-
-    val entries = entry_list // direct mapping in lieu of @Json meta tags
+data class Section(val heading: String?,
+                   private val paragraphs_list: List&lt;Paragraph>,
+                   val sections: List&lt;Section>? = null) { // default value in constructor
+    val paragraphs = paragraphs_list // direct mapping in lieu of @Json meta tags
 }
-</code></pre></div></div></div><div class="case"><div class="name">Tests</div><div class="pair"><div class="card"><div class="lang">Javascript</div><pre class="code"><code class="swift">import { expect } from 'chai';
-import { parseJsonText } from "../src/JsonExample";
 
-let jsonString = `
-  {
-    "title": "Main Collection",
-    "entry_list": [
-      {
-        "title": "First Model",
-        "pageid": 2442
-      },
-      {
-        "title": "Second Model",
-        "pageid": 2553,
-        "extra": "value ignored",
-        "author": {
-          "name": "Author 1",
-          "author_id": 1422
+data class Paragraph(val paragraph_id: Int = -1,
+                     val body: String) {
+    val id = paragraph_id
+}
+
+class ExampleData {
+    val json = """
+{
+  "title": "Wiki Page Title",
+  "pageid": 313,
+  "sections": [
+    {
+      "heading": "First Section",
+      "paragraphs_list": [
+        {
+          "paragraph_id": 1,
+          "body": "Word1 word2 word3"
         }
-      }
-    ]
-  }`;
+      ],
+      "sections":[
+        {
+          "heading": "First SubSection",
+          "paragraphs_list": [
+            {
+              "paragraph_id": 2,
+              "body": "Word4 word5 word6"
+            },
+            {
+              "paragraph_id": 3,
+              "body": "Word7 word8 word9"
+            }
+]}]}]} """
+}
 
-describe('Json Parsing Example', function(){
 
-  let collection = parseJsonText(jsonString);
+</code></pre></div></div></div><div class="case"><div class="name">Tests</div><div class="pair"><div class="card"><div class="lang">Javascript</div><pre class="code"><code class="swift">require('chai').should();
+import {data} from "../src/Model"
+import {parse} from "../src/JsonExample";
 
-  it('should map raw json key author_id to id in Author data class', function(){
-    expect(collection.entries[1].author.id).to.equal(1422);
+describe('Json Parsing Example', function () {
+  let page = parse(data);
+
+  it("it should map raw json keys 'pageid' to 'id', " +
+      "'paragraphs_list' to 'paragraphs'", function () {
+    page.id.should.equal(313);
+    page.sections[0].sections[0].paragraphs.length.should.equal(2)
   });
 
-
-  it('should parse the json text into an object', function(){
-    console.log("running test");
-    expect(collection).to.be.a('object');
-    expect(collection.title).to.equal("Main Collection");
-    expect(collection.entries).to.be.a('array');
-    expect(collection.entries.length).to.equal(2);
-    expect(collection.entries[1].author.name).to.equal("Author 1");
+  it('should parse json data from string into page', function () {
+    page.should.not.equal(undefined);
+    page.sections.length.should.equal(1);
+    page.sections[0].sections[0].paragraphs[0].body.should.equal("Word4 word5 word6");
+    page.title.should.equal("Wiki Page Title");
   })
 });
 </code></pre></div><div class="card"><div class="lang">Kotlin</div><pre class="code"><code class="swift">package org.mobilerosetta.mobilerosetta
 
 import io.kotlintest.matchers.shouldBe
+import io.kotlintest.matchers.shouldNotBe
 import io.kotlintest.specs.StringSpec
 
 class JsonExampleSpec : StringSpec() {
-
     val example = JsonExample()
 
     init {
 
-        val collection = example.parseJsonText(jsonString)
+        val page = example.parse(ExampleData().json)!! // force unwrap helps streamline tests
 
-        "it should map raw json key 'author_id' to 'id' in Author data class" {
-            collection?.entries?.get(1)?.author?.id shouldBe 1422
+        "should map raw json keys 'pageid' to 'id', 'paragraphs_list' to 'paragraphs'" {
+            page.id shouldBe 313
+            page.sections[0].sections!![0].paragraphs.count() shouldBe 2
         }
 
-        "parse json data from string" {
-            collection?.entries?.count() shouldBe 2
-            collection?.entries?.get(0)?.pageid shouldBe 2442
-            collection?.entries?.get(1)?.title shouldBe "Second Model"
-            collection?.entries?.get(1)?.author?.name shouldBe "Author 1"
+        "should parse json data from string into page" {
+            page shouldNotBe null
+            page.sections.count() shouldBe 1
+            page.sections[0].sections!![0].paragraphs[0].body shouldBe "Word4 word5 word6"
+            page.title shouldBe "Wiki Page Title"
         }
-
     }
 }
 
-val jsonString = """
-{
-    "title": "Main Collection",
-    "entry_list": [
-        {
-            "title": "First Model",
-            "pageid": 2442
-        },
-        {
-            "title": "Second Model",
-            "pageid": 2553,
-            "author": {
-                "name": "Author 1",
-                "author_id": 1422
-            }
-        }
-    ]
-}
-"""
 </code></pre></div></div></div></div></body></html>

@@ -1,20 +1,15 @@
 import Foundation
 
 class JsonExample {
-
-    func parseJsonText(_ text:String) -> PageCollection? {
+    func parse(_ text: String) -> WikiPage? {
         let jsonData = text.data(using: .utf8)!
         let decoder = JSONDecoder()
-
         do {
-            let pageCollection = try decoder.decode(PageCollection.self, from: jsonData)
-            return pageCollection
-        }
-
-        catch let error {
+            let page = try decoder.decode(WikiPage.self, from: jsonData)
+            return page
+        } catch let error {
             print("!! error = \(error.localizedDescription)")
         }
-
         return nil
     }
 }

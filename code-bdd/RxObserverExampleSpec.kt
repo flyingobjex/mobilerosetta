@@ -5,39 +5,25 @@ import io.kotlintest.specs.StringSpec
 
 class RxObserverExampleSpec : StringSpec() {
 
-    val example = RxObserverExample()
-
     init {
+        "given an observable Section, when an update is made, " +
+        "then it should send values to the subscribers " +
+        "causing the 'subscribe' code block to run" {
+            val example = RxObserverExample()
+            example.details shouldBe "H:++, S:0, P:0"
 
-        "given an observable author, when an update is made, the code block should run" {
-            example.author.subscribe { a ->
-                a.name shouldBe "New Author"
-                a.id shouldBe 2223
+            var values = ""  // collects the values of subscription during test
+            example.section.subscribe {
+                values += it.heading + ","
             }
 
-            example.author.onNext(Author("New Author", 2223))
-            example.description() shouldBe "Author: New Author, ID: 2223"
-        }
+            example.section.onNext(Section("H1", listOf(Paragraph(1,"")), listOf()))
+            example.details shouldBe "H:H1, P:1, S:0"
 
-        "when a subscription is updated, it should reflect the new values" {
-            example.author.onNext(Author("Next Author", 1414))
-            example.description() shouldBe "Author: Next Author, ID: 1414"
-        }
+            example.section.onNext(Section("H2", listOf(Paragraph(2,"")), listOf()))
+            example.description shouldBe "Details for section :: H:H2, P:1, S:0"
 
-        "given an author with no name or id, it should return 'no name' and 999" {
-            example.author.onNext(Author(null, null))
-            example.description() shouldBe "Author: no name, ID: 999"
-        }
-
-        "optional code block should execute" {
-            example.author.subscribe { a ->
-                a.id?.let{ 
-                    println("block should execute")
-                    it shouldBe 3322
-                }
-                a.name?.let{ println("!! should not execute !!") }
-            }
-            example.author.onNext(Author(null, 3322))
+            values shouldBe "++,H1,H2,"
         }
     }
 }

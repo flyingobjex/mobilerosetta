@@ -3,21 +3,26 @@ import RxSwift
 
 class RxObserverExample {
 
-    let author:PublishSubject&lt;Author> = PublishSubject&lt;Author>()
-
-    private var currentName:String? = nil
-    private var currentAuthorID:Int? = nil
+    let section: BehaviorSubject&lt;Section> =
+            BehaviorSubject&lt;Section>(value: Section("++", [Paragraph](), [Section]()))
 
     private var dispose = DisposeBag()
-    
+
     init() {
-        author.subscribe(onNext:{ a in
-            self.currentName = a.name
-            self.currentAuthorID = a.id
-        }).disposed(by: dispose)
+        section.subscribe(onNext: { it in                   // Rx subscription
+            print("onNext() section heading = \(it.heading)")
+            self.details =
+                    "H:\(it.heading ?? "--"), " +          // conditional assignment ??
+                    "P:\(it.paragraphs.count), " +
+                    "S:\(it.sections?.count ?? -1)"    // conditional assignment ??
+        })
     }
 
-    func description() -> String {
-        return "Author: \(currentName ?? "no name"), ID: \(currentAuthorID ?? 999)"
+    private (set) var details: String = "H:++, P:++, S:++"  // private setter, public getter
+
+    var description: String {  // getter
+        get {
+            return "Details for section :: " + details
+        }
     }
 }
