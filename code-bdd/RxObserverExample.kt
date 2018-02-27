@@ -9,10 +9,7 @@ class RxObserverExample {
 
     var details: String = "H:++, P:++, S:++"
         private set
-
-    val description: String
-        get() = "Details for section :: " + details  // getter shorthand
-
+    
     init {
         section.onNext(initialValue)
         section.subscribe {
@@ -25,4 +22,7 @@ class RxObserverExample {
                             ?: -1}"      // optional method call, optional assignment, elvis symbol
         }
     }
+
+    val description: String
+        get() = "Details for section :: " + details  // getter shorthand
 }
